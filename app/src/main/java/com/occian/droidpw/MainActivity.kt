@@ -1,7 +1,9 @@
 package com.occian.droidpw
 
+import android.content.ClipData
 import android.content.ClipboardManager
 import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
@@ -27,6 +29,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         copyView.setOnClickListener {
+            val textToCopy = pwstringView.text
+            val clipBoard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("COPY TEXT", textToCopy)
+            clipBoard.primaryClip = clip
             Toast.makeText(applicationContext, "PW copied!", Toast.LENGTH_SHORT).show()
         }
 
@@ -118,9 +124,6 @@ class MainActivity : AppCompatActivity() {
        return pwstringView.toString()
     } // get alphanumeric string function
 
-    private fun copyView() {
-        val clipBoard = getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
-    }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         val inflater: MenuInflater = menuInflater
@@ -132,12 +135,8 @@ class MainActivity : AppCompatActivity() {
         // Handle item selection
         return when (item.itemId) {
             R.id.settings -> {
-                //settings()
-                Toast.makeText(
-                    applicationContext,
-                    "Settings for you",
-                    Toast.LENGTH_SHORT
-                ).show()
+                val settingsIntent = Intent(this@MainActivity, SettingsActivity::class.java)
+                startActivity(settingsIntent)
                 true
             }
             R.id.help -> {
